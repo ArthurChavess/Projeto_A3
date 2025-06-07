@@ -1,44 +1,32 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+    <!-- Novo Cabeçalho -->
+    <q-header elevated class="bg-primary text-white">
+      <q-toolbar class="justify-between">
 
-        <q-toolbar-title>
+        <!-- Logo / Título -->
+        <div class="text-h6 q-ml-md">
           ÂnimaBus
-        </q-toolbar-title>
+        </div>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <!-- Links principais -->
+        <div class="row items-center q-gutter-sm">
+          <q-btn flat dense label="Início" to="/" />
+          <q-btn flat dense label="Linhas" to="/linhas" />
+          <q-btn flat dense label="Sobre" to="/sobre" />
+          <q-btn flat dense label="Contato" to="/contato" />
+        </div>
+
+        <!-- Autenticação -->
+        <div class="row items-center q-gutter-sm q-mr-md">
+          <q-btn outline color="white" label="Entrar" to="/login" />
+          <q-btn color="secondary" label="Cadastrar" to="/cadastro" />
+        </div>
+
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
+    <!-- Container principal -->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -46,57 +34,5 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
+// Drawer e EssentialLinks removidos porque não estão mais sendo usados
 </script>
