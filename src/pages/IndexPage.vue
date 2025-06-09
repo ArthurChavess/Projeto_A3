@@ -14,74 +14,48 @@
 
       <!-- Barra lateral -->
       <div class="col-12 col-md-4">
-        <q-card flat bordered class="bg-grey-1 q-pa-md" style="border-radius: 12px; min-height: 500px;">
+        <q-card flat bordered class="q-pa-lg" style="border-radius: 12px; min-height: 500px; background-color: #d1e7dc; display: flex; flex-direction: column;">
 
-          <!-- Pesquisar linha -->
-          <q-btn
-            label="🔍 Pesquisar linha"
-            color="primary"
-            class="full-width q-mb-md"
-            @click="mostrarBusca = !mostrarBusca"
-          />
-          <q-input
-            v-if="mostrarBusca"
-            v-model="termoBusca"
-            outlined
-            label="Digite o número ou nome da linha"
-            dense
-            class="q-mb-md"
-          />
-
-          <!-- Lista de linhas -->
-          <div class="q-mb-md">
-            <!-- Linha 1 -->
-            <q-card flat bordered class="q-pa-sm q-mb-sm">
-              <div class="row items-center justify-between">
-                <div>
-                  <div class="text-subtitle2">LINHA 300 - FARRAPOS</div>
-                  <div class="text-caption">Chega em 10 minutos</div>
-                </div>
-                <div class="text-right">
-                  <q-badge color="orange" class="q-mb-xs">Lotação: 70%</q-badge>
-                  <q-btn dense flat size="sm" icon="map" label="Ver" color="primary" />
-                </div>
-              </div>
-            </q-card>
-
-            <!-- Linha 2 -->
-            <q-card flat bordered class="q-pa-sm q-mb-sm">
-              <div class="row items-center justify-between">
-                <div>
-                  <div class="text-subtitle2">LINHA 102 - CENTRO</div>
-                  <div class="text-caption">Chega em 6 minutos</div>
-                </div>
-                <div class="text-right">
-                  <q-badge color="green" class="q-mb-xs">Lotação: 40%</q-badge>
-                  <q-btn dense flat size="sm" icon="map" label="Ver" color="primary" />
-                </div>
-              </div>
-            </q-card>
-
-            <!-- Linha 3 -->
-            <q-card flat bordered class="q-pa-sm q-mb-sm">
-              <div class="row items-center justify-between">
-                <div>
-                  <div class="text-subtitle2">LINHA 201 - CAMPUS</div>
-                  <div class="text-caption">Chega em 12 minutos</div>
-                </div>
-                <div class="text-right">
-                  <q-badge color="red" class="q-mb-xs">Lotação: 95%</q-badge>
-                  <q-btn dense flat size="sm" icon="map" label="Ver" color="primary" />
-                </div>
-              </div>
-            </q-card>
+          <!-- Título Próximos ônibus -->
+          <div class="text-h4 text-center font-bold q-mb-lg" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            PRÓXIMOS ÔNIBUS
           </div>
 
-          <!-- Ônibus mais perto -->
-          <div :class="['q-pa-md q-mt-md text-white', corDoOnibusMaisPerto]" style="border-radius: 12px;">
-            <div class="text-subtitle1">LINHA 752 - ASSIS BRASIL</div>
-            <div class="q-mt-xs">Chega em: <strong>5 min</strong></div>
-            <div class="q-mt-xs">Lotação: <strong>90%</strong></div>
+          <!-- Próximos ônibus (tabela) -->
+          <q-table
+            flat
+            dense
+            :rows="onibusProximos"
+            :columns="colunas"
+            row-key="linha"
+            hide-bottom
+            class="text-body2"
+            style="background-color: #f0f6f4; font-size: 1.1rem; flex-grow: 1;"
+            :pagination="{ rowsPerPage: 10 }"
+            :rows-per-page-options="[10]"
+            row-class="custom-row"
+          >
+            <template v-slot:body-cell-lotacao="props">
+              <q-badge
+                :color="corLotacao(props.row.lotacao)"
+                rounded
+                style="min-width: 45px; text-align: center; font-size: 1rem;"
+              >
+                {{ props.row.lotacao }}%
+              </q-badge>
+            </template>
+          </q-table>
+
+          <!-- Botão pesquisar linha no espaço sobrando -->
+          <div class="q-mt-md" style="text-align: center;">
+            <q-btn
+              label="PESQUISAR LINHA"
+              color="green"
+              rounded
+              size="sm"
+              style="min-width: 140px;"
+              @click="abrirBusca"
+            />
           </div>
 
         </q-card>
@@ -92,16 +66,43 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-const mostrarBusca = ref(false)
-const termoBusca = ref('')
+const onibusProximos = ref([
+  { linha: 'T6', destino: 'Baltazar', tempo: '10 min', lotacao: 70 },
+  { linha: 'T829', destino: 'Bom Jesus', tempo: '20 min', lotacao: 40 },
+  { linha: '104', destino: 'Vila Nova', tempo: '15 min', lotacao: 55 },
+  { linha: '220', destino: 'São José', tempo: '8 min', lotacao: 85 },
+  { linha: '350', destino: 'Centro Histórico', tempo: '12 min', lotacao: 30 },
+  { linha: '470', destino: 'Zona Sul', tempo: '18 min', lotacao: 60 },
+  { linha: '580', destino: 'Cidade Baixa', tempo: '7 min', lotacao: 45 },
+  { linha: '610', destino: 'Partenon', tempo: '9 min', lotacao: 65 },
+  { linha: '720', destino: 'Cavalhada', tempo: '11 min', lotacao: 50 },
+  { linha: '830', destino: 'Sarandi', tempo: '14 min', lotacao: 35 }
+])
 
-const lotacaoOnibusMaisPerto = 90
+const colunas = [
+  { name: 'linha', label: 'Linha', field: 'linha', align: 'left' },
+  { name: 'destino', label: 'Destino', field: 'destino', align: 'left' },
+  { name: 'tempo', label: 'Tempo', field: 'tempo', align: 'center' },
+  { name: 'lotacao', label: 'Lotação', field: 'lotacao', align: 'center' }
+]
 
-const corDoOnibusMaisPerto = computed(() => {
-  if (lotacaoOnibusMaisPerto <= 50) return 'bg-green-5'
-  if (lotacaoOnibusMaisPerto <= 80) return 'bg-orange-5'
-  return 'bg-red-5'
-})
+function corLotacao(lotacao) {
+  if (lotacao <= 50) return 'green'
+  if (lotacao <= 80) return 'orange'
+  return 'red'
+}
+
+function abrirBusca() {
+  // Aqui você pode implementar a ação ao clicar no botão,
+  // como abrir um modal, campo de busca, etc.
+  alert('Abrir busca ainda não implementado')
+}
 </script>
+
+<style scoped>
+.custom-row {
+  height: 50px;
+}
+</style>
