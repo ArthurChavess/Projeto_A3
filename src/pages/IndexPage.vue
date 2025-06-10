@@ -30,7 +30,7 @@
           </div>
 
           <q-list separator>
-            <q-item v-for="(parada, index) in proximasParadas" :key="index">
+            <q-item v-for="(parada, index) in db.paradas" :key="index">
               <q-item-section>
                 <q-item-label class="text-subtitle1">
                   {{ parada.nome }}
@@ -73,8 +73,11 @@
           <q-table
             flat
             dense
-            :rows="onibusProximos"
-            :columns="colunas"
+            :rows="db.linhas"
+            :columns="[{ name: 'linha', label: 'Linha', field: 'linha', align: 'left' },
+                      { name: 'destino', label: 'Destino', field: 'destino', align: 'left' },
+                      { name: 'tempo', label: 'Tempo', field: 'tempo', align: 'center' },
+                      { name: 'lotacao', label: 'Lotação', field: 'lotacao', align: 'center' }]"
             row-key="linha"
             hide-bottom
             class="text-body2"
@@ -83,7 +86,11 @@
             :rows-per-page-options="[10]"
             row-class="custom-row"
           >
+            <template v-slot:body-cell-tempo="props">
+              <td style=" text-align: center">{{ addLeftZero(props.row.tempo) }} min</td>
+            </template>
             <template v-slot:body-cell-lotacao="props">
+              <td style="width: 1px">
               <q-badge
                 :color="corLotacao(props.row.lotacao)"
                 rounded
@@ -91,6 +98,7 @@
               >
                 {{ props.row.lotacao }}%
               </q-badge>
+              </td>
             </template>
           </q-table>
 
@@ -112,7 +120,7 @@
           flat
           bordered
           class="q-pa-md q-mt-md"
-          :style="`border-radius: 12px; background-color: ${corFundoLotacao(onibusMaisProximo.lotacao)};`"
+          :style="`border-radius: 12px; background-color: ${corFundoLotacao(getOnibusMaisProximo().lotacao)};`"
         >
           <div
             class="text-h4 text-center font-bold q-mb-md"
@@ -121,19 +129,19 @@
             ÔNIBUS MAIS PRÓXIMO
           </div>
           <div class="text-subtitle1 q-mb-sm">
-            Linha: {{ onibusMaisProximo.linha }} - {{ onibusMaisProximo.destino }}
+            Linha: {{ getOnibusMaisProximo().linha }} - {{ getOnibusMaisProximo().destino }}
           </div>
           <div class="q-mb-sm">
-            Chega em: <strong>{{ onibusMaisProximo.tempo }}</strong>
+            Chega em: <strong>{{ getOnibusMaisProximo().tempo }}</strong>
           </div>
           <div>
             Lotação:
             <q-badge
-              :color="corLotacao(onibusMaisProximo.lotacao)"
+              :color="corLotacao(getOnibusMaisProximo().lotacao)"
               rounded
               style="min-width: 45px; text-align: center; font-size: 1rem"
             >
-              {{ onibusMaisProximo.lotacao }}%
+              {{ getOnibusMaisProximo().lotacao }}%
             </q-badge>
           </div>
         </q-card>
@@ -148,47 +156,23 @@ window.L = L
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import { ref } from 'vue'
+import db from 'src/db.json'
 
 const zoom = ref(13) // Defina o zoom inicial desejado
 
-// Dados dos ônibus
-const onibusProximos = ref([
-  { linha: 'T6', destino: 'Baltazar', tempo: '10 min', lotacao: 70 },
-  { linha: 'T829', destino: 'Bom Jesus', tempo: '20 min', lotacao: 40 },
-  { linha: '104', destino: 'Vila Nova', tempo: '15 min', lotacao: 55 },
-  { linha: '220', destino: 'São José', tempo: '8 min', lotacao: 85 },
-  { linha: '350', destino: 'Centro Histórico', tempo: '12 min', lotacao: 30 },
-  { linha: '470', destino: 'Zona Sul', tempo: '18 min', lotacao: 60 },
-  { linha: '580', destino: 'Cidade Baixa', tempo: '7 min', lotacao: 45 },
-  { linha: '610', destino: 'Partenon', tempo: '9 min', lotacao: 65 },
-  { linha: '720', destino: 'Cavalhada', tempo: '11 min', lotacao: 50 },
-  { linha: '830', destino: 'Sarandi', tempo: '14 min', lotacao: 35 },
-])
+// Ônibus mais próximo 
+function getOnibusMaisProximo() {
+  const tempArray = db.linhas
+  let sortedArray = tempArray.sort((a, b) => a.tempo - b.tempo)
+  return sortedArray[0]
+}
 
-// Ônibus mais próximo (dados estáticos)
-const onibusMaisProximo = ref({
-  linha: 'T27',
-  destino: 'Assis Brasil',
-  tempo: '1 min',
-  lotacao: 95,
-})
-
-// Paradas frequentes simuladas
-const proximasParadas = ref([
-  { nome: 'Av. Assis Brasil - Estação FAPA', distancia: '300m' },
-  { nome: 'Shopping Iguatemi', distancia: '500m' },
-  { nome: 'Terminal Triângulo', distancia: '650m' },
-  { nome: 'Rua Dona Adda Mascarenhas', distancia: '800m' },
-  { nome: 'Rua Teixeira Mendes', distancia: '950m' },
-])
-
-// Colunas da tabela
-const colunas = [
-  { name: 'linha', label: 'Linha', field: 'linha', align: 'left' },
-  { name: 'destino', label: 'Destino', field: 'destino', align: 'left' },
-  { name: 'tempo', label: 'Tempo', field: 'tempo', align: 'center' },
-  { name: 'lotacao', label: 'Lotação', field: 'lotacao', align: 'center' },
-]
+// const onibusMaisProximo = ref({
+//   linha: 'T27',
+//   destino: 'Assis Brasil',
+//   tempo: '1 min',
+//   lotacao: 95,
+// })
 
 // Função para determinar a cor do badge
 function corLotacao(lotacao) {
@@ -207,6 +191,10 @@ function corFundoLotacao(lotacao) {
 // Função para abrir busca (simulada)
 function abrirBusca() {
   alert('Funcionalidade de busca será implementada aqui')
+}
+
+function addLeftZero(number) {
+  return String(number).padStart(2, '0');
 }
 </script>
 

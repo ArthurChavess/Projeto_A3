@@ -1,0 +1,92 @@
+{
+    "linhas":[  
+        { 
+            "linha": "T6", 
+            "destino": "Baltazar", 
+            "tempo": 10, 
+            "lotacao": 70 
+        },
+        { 
+            "linha": "T829", 
+            "destino": "Bom Jesus", 
+            "tempo": 20, 
+            "lotacao": 40 
+        },
+        { 
+            "linha": "104", 
+            "destino": "Vila Nova", 
+            "tempo": 15, 
+            "lotacao": 55 
+        },
+        { 
+            "linha": "220", 
+            "destino": "São José", 
+            "tempo": 8, 
+            "lotacao": 85 
+        },
+        { 
+            "linha": "350", 
+            "destino": "Centro Histórico", 
+            "tempo": 12, 
+            "lotacao": 30 
+        },
+        { 
+            "linha": "470", 
+            "destino": "Zona Sul", 
+            "tempo": 18, 
+            "lotacao": 60 
+        },
+        { 
+            "linha": "580", 
+            "destino": "Cidade Baixa", 
+            "tempo": 7, 
+            "lotacao": 45 
+        },
+        { 
+            "linha": "610", 
+            "destino": "Partenon", 
+            "tempo": 9, 
+            "lotacao": 65 
+        },
+        { 
+            "linha": "720", 
+            "destino": "Cavalhada", 
+            "tempo": 11, 
+            "lotacao": 50 
+        },
+        { 
+            "linha": "830", 
+            "destino": "Sarandi", 
+            "tempo": 14, 
+            "lotacao": 35 
+        },
+        {
+            "linha": "T27",
+            "destino": "Assis Brasil",
+            "tempo": 1,
+            "lotacao": 95
+        }
+],
+    "paradas":[
+        { 
+            "nome": "Av. Assis Brasil - Estação FAPA", 
+            "distancia": "300m" 
+        },
+        { 
+            "nome": "Shopping Iguatemi", 
+            "distancia": "500m" 
+        },
+        { 
+            "nome": "Terminal Triângulo", 
+            "distancia": "650m" 
+        },
+        { 
+            "nome": "Rua Dona Adda Mascarenhas",
+            "distancia": "800m" 
+        },
+        { 
+            "nome": "Rua Teixeira Mendes",
+            "distancia": "950m" 
+        }
+]
+}
