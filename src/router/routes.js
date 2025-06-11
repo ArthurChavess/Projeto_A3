@@ -17,14 +17,14 @@ const routes = [
     path: '/contato',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/BlankPage.vue') }
+      { path: '', component: () => import('pages/ContatoPage.vue') }
     ]
   },
   {
     path: '/sobre',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/BlankPage.vue') }
+      { path: '', component: () => import('pages/SobrePage.vue') }
     ]
   },
 
