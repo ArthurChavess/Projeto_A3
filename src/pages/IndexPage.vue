@@ -104,14 +104,13 @@
 
           <!-- Botão de pesquisa -->
           <div class="q-mt-md" style="text-align: center">
-            <q-btn
+            <a href="/#/linhas"><q-btn
               label="PESQUISAR LINHA"
               color="green"
               rounded
               size="sm"
               style="min-width: 140px"
-              @click="abrirBusca"
-            />
+            /></a>
           </div>
         </q-card>
 
@@ -132,7 +131,7 @@
             Linha: {{ getOnibusMaisProximo().linha }} - {{ getOnibusMaisProximo().destino }}
           </div>
           <div class="q-mb-sm">
-            Chega em: <strong>{{ getOnibusMaisProximo().tempo }}</strong>
+            Chega em: <strong>{{ getOnibusMaisProximo().tempo }} min</strong>
           </div>
           <div>
             Lotação:
@@ -167,13 +166,6 @@ function getOnibusMaisProximo() {
   return sortedArray[0]
 }
 
-// const onibusMaisProximo = ref({
-//   linha: 'T27',
-//   destino: 'Assis Brasil',
-//   tempo: '1 min',
-//   lotacao: 95,
-// })
-
 // Função para determinar a cor do badge
 function corLotacao(lotacao) {
   if (lotacao <= 50) return 'positive' // Verde
@@ -186,11 +178,6 @@ function corFundoLotacao(lotacao) {
   if (lotacao <= 50) return '#d1e7dd' // Verde claro
   if (lotacao <= 80) return '#fff3cd' // Amarelo claro
   return '#f8d7da' // Vermelho claro
-}
-
-// Função para abrir busca (simulada)
-function abrirBusca() {
-  alert('Funcionalidade de busca será implementada aqui')
 }
 
 function addLeftZero(number) {
