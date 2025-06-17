@@ -19,8 +19,8 @@
 
         <!-- Autenticação -->
         <div class="row items-center q-gutter-sm q-mr-md">
-          <q-btn outline color="white" label="Entrar" to="/login" />
-          <q-btn color="secondary" label="Cadastrar" to="/cadastro" />
+          <!-- <q-btn outline color="white" label="Entrar" to="/login" />
+          <q-btn color="secondary" label="Cadastrar" to="/cadastro" /> -->
         </div>
 
       </q-toolbar>

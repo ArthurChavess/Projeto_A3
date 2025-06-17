@@ -8,8 +8,11 @@
             class="full-width q-mb-md"
             @click="mostrarBusca = !mostrarBusca"
           />
-          <q-form id="buscar" class="row" style=" top: 5px">
+          <q-form onSubmit="error" id="buscar" class="row" style=" top: 5px">
             <q-input
+              v-on:keydown.enter="getValue()"
+              clearable
+              clear-icon="close"
               v-if="mostrarBusca"
               v-model="busca"
               for="linha"
@@ -17,9 +20,13 @@
               label="Digite o número ou nome da linha"
               dense
               class="q-mb-md"
-              style="width: 95vw;"
-            />
-            <q-btn v-if="mostrarBusca" class="q-ml-sm" flat round style="font-size: 20px; top: -10px" icon="search" @click="getValue()"></q-btn>
+              style="width: 100vw;"
+            >
+            <template v-slot:after>
+              <q-btn v-if="mostrarBusca" class="q-ml-xs" flat round icon="search" @click="getValue()"></q-btn>
+            </template>
+            </q-input>
+            
           </q-form>
 
           <!-- Lista de linhas -->
@@ -33,13 +40,11 @@
 </style>
 <script setup>
 import LinhasComponent from 'src/components/LinhasComponent.vue';
-import db from "../db.json"
+import db from "../db.js"
 import {ref} from 'vue'
 
 let mostrarBusca = ref(false)
-
 const busca = ref('')
-
 let resultArray = new Array
 resultArray = sortOnibusTempo()
 let arr = ref(resultArray)
@@ -55,17 +60,7 @@ function getValue() {
   var formData = new FormData(document.getElementById("buscar"));
   let buscaTexto = Object.fromEntries(formData)
   
-  resultArray = []
-  sortOnibusTempo().forEach(element => {
-    if (element.linha.includes(buscaTexto.linha)){
-      resultArray.push(element);
-    }else{
-      if (element.destino.includes(buscaTexto.linha)){
-      resultArray.push(element)
-      }
-    }
-  })
-  arr.value = resultArray
-  console.log(resultArray);
+  arr.value = sortOnibusTempo().filter((element) => element.linha.toLowerCase().includes(buscaTexto.linha.toLowerCase()) || element.destino.toLowerCase().includes(buscaTexto.linha.toLowerCase()))
+  console.log(arr.value);  
 }
 </script>

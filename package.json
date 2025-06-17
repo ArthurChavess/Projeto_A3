@@ -1,8 +1,8 @@
 {
-  "name": "receitas",
+  "name": "animaBus",
   "version": "0.0.1",
-  "description": "Site para receitas",
-  "productName": "Quasar App",
+  "description": "Site para transporte publico de qualidade",
+  "productName": "AnimaBus",
   "author": "",
   "type": "module",
   "private": true,
@@ -17,7 +17,7 @@
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
-    "axios": "^1.2.1",
+    "axios": "^1.10.0",
     "chart.js": "^4.4.9",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.1",

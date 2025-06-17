@@ -155,7 +155,7 @@ window.L = L
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
 import { ref } from 'vue'
-import db from 'src/db.json'
+import db from '../db.js'
 
 const zoom = ref(13) // Defina o zoom inicial desejado
 
